@@ -316,7 +316,8 @@ class SyslogHandlerTests(HandlerTests, unittest.TestCase):
         handler = self._makeOne()
         record = self._makeLogRecord('hello!')
         handler.emit(record)
-        syslog.syslog.assert_called_with('hello!')
+        from supervisor.loggers import LevelsByName
+        syslog.syslog.assert_called_with(LevelsByName.TRAC, 'hello!')
 
     @mock.patch('syslog.syslog', MockSysLog())
     def test_close(self):
@@ -333,10 +334,11 @@ class SyslogHandlerTests(HandlerTests, unittest.TestCase):
         handler = self._makeOne()
         record = self._makeLogRecord(u'fi\xed')
         handler.emit(record)
+        from supervisor.loggers import LevelsByName
         if sys.version_info < (3, 0):
-            syslog.syslog.assert_called_with('fi\xc3\xad')
+            syslog.syslog.assert_called_with(LevelsByName.TRAC, 'fi\xc3\xad')
         else:
-            syslog.syslog.assert_called_with(u'fi\xed')
+            syslog.syslog.assert_called_with(LevelsByName.TRAC, u'fi\xed')
 
 class DummyHandler:
     close = False

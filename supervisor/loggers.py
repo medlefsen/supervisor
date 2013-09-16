@@ -296,6 +296,16 @@ class Logger:
     def getvalue(self):
         raise NotImplementedError
 
+
+level_to_syslog = {
+    LevelsByName.CRIT: syslog.LOG_CRIT,
+    LevelsByName.ERRO: syslog.LOG_ERR,
+    LevelsByName.WARN: syslog.LOG_WARNING,
+    LevelsByName.INFO: syslog.LOG_NOTICE,
+    LevelsByName.DEBG: syslog.LOG_DEBUG,
+}
+
+
 class SyslogHandler(Handler):
     def __init__(self, tag=None, pid=False):
         self.tag = tag or "supervisord"
@@ -311,15 +321,16 @@ class SyslogHandler(Handler):
     def emit(self, record):
         try:
             params = record.asdict()
+            priority = level_to_syslog.get(record.level, syslog.LOG_WARNING)
             message = params['message']
             syslog.openlog(self.tag, self.options)
             for line in message.rstrip('\n').split('\n'):
                 params['message'] = line
                 msg = self.fmt % params
                 try:
-                    syslog.syslog(msg)
+                    syslog.syslog(priority, msg)
                 except UnicodeError:
-                    syslog.syslog(msg.encode("UTF-8"))
+                    syslog.syslog(priority, msg.encode("UTF-8"))
         except:
             self.handleError(record)
 
