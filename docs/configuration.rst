@@ -196,6 +196,19 @@ follows.
 
   *Introduced*: 3.0
 
+``syslog``
+
+  If true, then supervisor will send all of its messages to syslog.
+  Messages are currently sent with the default facility (user) and a
+  range of priorities, with a tag of "supervisord" and a process ID.
+
+  *Default*:  false
+
+  *Required*:  No.
+
+  *Introduced*: 3.1a1
+
+
 ``logfile_maxbytes``
 
   The maximum number of bytes that may be consumed by the activity log
@@ -847,6 +860,8 @@ where specified.
 ``stdout_syslog``
 
   If true, stdout will be directed to syslog along with the process name.
+  Messages are sent with a user priority, a tag of the process name
+  without PID, and an additional prefix of ``stdout:``
 
   *Default*: False
 
@@ -924,6 +939,8 @@ where specified.
 ``stderr_syslog``
 
   If true, stderr will be directed to syslog along with the process name.
+  Messages are sent with a user priority, a tag of the process name
+  without PID, and an additional prefix of ``stderr``
 
   *Default*: False
 
