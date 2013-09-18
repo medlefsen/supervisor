@@ -15,6 +15,9 @@
   same time.  Specifying a log filename of ``syslog`` is still supported
   but deprecated.  Patch by Jason R. Coombs.
 
+- New ``syslog`` boolean option in the ``[supervisord]`` section.  Similar
+  feature for top-level supervisor.  See docs for more.  Patch by Sam Vilain.
+
 3.0 (2013-07-30)
 ----------------
 

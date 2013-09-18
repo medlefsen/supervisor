@@ -940,7 +940,7 @@ where specified.
 
   If true, stderr will be directed to syslog along with the process name.
   Messages are sent with a user priority, a tag of the process name
-  without PID, and an additional prefix of ``stderr``
+  without PID, and an additional prefix of ``stderr:``
 
   *Default*: False
 
