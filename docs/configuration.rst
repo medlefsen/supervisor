@@ -202,6 +202,14 @@ follows.
   Messages are currently sent with the facility 'daemon' and a
   range of priorities, a tag of "supervisord" and a process ID.
 
+  Instead of a simple ``true`` or ``false``, this can also be set to a
+  syslog facility, like ``local0``, to override the default of
+  ``daemon``.  All messages can be forced to a single severity using a
+  value like ``local0.warning``.
+
+  Facilities can also be specified numerically, such as ``10`` to mean
+  ``authpriv``.
+
   *Default*:  false
 
   *Required*:  No.
@@ -864,6 +872,9 @@ where specified.
   the tag set to the process name, currently without the PID of the
   subprocess included.
 
+  The syslog facility, or facility and severity can be adjusted by
+  specifying a syslog facility such as ``local1`` or ``local1.notice``.
+
   *Default*: False
 
   *Required*:  No.
@@ -943,6 +954,9 @@ where specified.
   Messages are sent with 'user' facility and priority 'notice', and with
   the tag set to the process name, currently without the PID of the
   subprocess included.
+
+  The syslog facility, or facility and severity can be adjusted by
+  specifying a syslog facility such as ``local1`` or ``local1.err``.
 
   *Default*: False
 

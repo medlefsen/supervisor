@@ -203,6 +203,14 @@ class DatatypesTest(unittest.TestCase):
         self.assertEqual(integer('1'), 1)
         self.assertEqual(integer(str(sys.maxint+1)), sys.maxint+1)
 
+    def test_syslog_returns_values(self):
+        for x, y in {
+            None: (None, None),
+            "daemon": ("daemon", None),
+            "user.err": ("daemon", "err"),
+        }.iteritems():
+            self.assert_(datatypes.syslog_target(x), y)
+
     def test_url_accepts_urlparse_recognized_scheme_with_netloc(self):
         good_url = 'http://localhost:9001'
         self.assertEqual(datatypes.url(good_url), good_url)

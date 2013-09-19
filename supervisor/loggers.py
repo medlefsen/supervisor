@@ -12,6 +12,7 @@ import errno
 import sys
 import time
 import traceback
+import types
 
 try:
     import syslog
@@ -309,11 +310,13 @@ level_to_syslog = {
 class SyslogHandler(Handler):
     def __init__(self, tag=None, pid=False, facility="daemon", priority=None):
         self.tag = tag or "supervisord"
-        self.facility = (getattr(syslog, "LOG_" + facility.upper(), None),)
-        self.priority = (
-            priority if priority is None or isinstance(priority, int) else
-            getattr(syslog, "LOG_" + priority.upper(), None)
-        )
+        def _int_string_or_none(val):
+            return val if isinstance(val, (int, types.NoneType)) else (
+                getattr(syslog, "LOG_" + val.upper(), None)
+            )
+
+        self.priority = _int_string_or_none(priority)
+        self.facility = _int_string_or_none(facility)
         self.options = syslog.LOG_PID if pid else 0
         assert 'syslog' in globals(), "Syslog module not present"
 
@@ -330,7 +333,7 @@ class SyslogHandler(Handler):
                 record.level, syslog.LOG_WARNING
             )
             message = params['message']
-            syslog.openlog(self.tag, self.options, *self.facility)
+            syslog.openlog(self.tag, self.options, self.facility)
             for line in message.rstrip('\n').split('\n'):
                 params['message'] = line
                 msg = self.fmt % params
